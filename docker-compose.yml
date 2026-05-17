@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: loan-app
+    container_name: loan-app
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /app/database/database.sqlite
+    volumes:
+      # Live-mount source for development; named volume keeps vendor/ from
+      # the image so the host doesn't need a local composer install.
+      - .:/app
+      - vendor:/app/vendor
+
+volumes:
+  vendor:
