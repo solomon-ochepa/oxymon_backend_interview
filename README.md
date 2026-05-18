@@ -1,58 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Loan App API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple loan-management REST API built with **Laravel 13 / PHP 8.5**, used for interviewing
+candidates on PHP, Laravel, and backend fundamentals.
 
-## About Laravel
+Features token-based authentication (Laravel Sanctum), per-user loan ownership, request
+validation, API Resources, and interactive Swagger/OpenAPI documentation.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| | |
+|---|---|
+| Framework | Laravel 13 |
+| Language | PHP 8.5 |
+| Database | SQLite (zero setup; `pdo_mysql` is also bundled if you want to switch) |
+| Auth | Laravel Sanctum (personal access tokens) |
+| API docs | `darkaonline/l5-swagger` (OpenAPI 3) |
+| Runtime | Docker (PHP built-in server) |
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Setup with Docker (recommended)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Prerequisites: **Docker Desktop** running.
 
 ```bash
-composer require laravel/boost --dev
+# 1. Build the image (installs PHP extensions + Composer dependencies)
+docker compose build
 
-php artisan boost:install
+# 2. Start the app (entrypoint runs key:generate, migrate, and generates Swagger docs)
+docker compose up -d
+
+# 3. Tail logs (optional)
+docker compose logs -f app
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The API is now available at **http://localhost:8000**.
 
-## Contributing
+```bash
+# Stop
+docker compose down
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Run any artisan command inside the container
+docker compose exec app php artisan <command>
+```
 
-## Code of Conduct
+> **Note:** the project source is bind-mounted, so code edits are picked up live.
+> `vendor/` is a named volume seeded from the image. If you change Composer
+> dependencies, run `docker compose exec app composer require <pkg>` **and**
+> rebuild (`docker compose build`) so the image stays reproducible.
+>
+> **Port 8000 gotcha:** if you also ran `php artisan serve` locally, that host
+> process can shadow the container on port 8000. Clear it with
+> `pkill -f "artisan serve"` if responses look wrong.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Setup without Docker (alternative)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Prerequisites: PHP 8.5+, Composer.
 
-## License
+```bash
+composer install
+cp .env.example .env          # if .env is missing
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
+php artisan l5-swagger:generate
+php artisan serve             # http://localhost:8000
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## API Documentation (Swagger)
+
+Interactive docs (with an **Authorize** button for the bearer token):
+
+- **Swagger UI:** http://localhost:8000/api/documentation
+- **OpenAPI JSON:** http://localhost:8000/docs
+
+Regenerate after changing annotations:
+
+```bash
+docker compose exec app php artisan l5-swagger:generate
+```
+
+---
+
+## Authentication
+
+All `/api/loans*` endpoints require a Sanctum bearer token. This is an
+API-only app — every `/api/*` request is treated as JSON, so auth failures
+return a clean `401` (not a redirect).
+
+```bash
+# 1. Register (or POST /api/login with existing credentials)
+curl -X POST http://localhost:8000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ada","email":"ada@example.com","password":"Password123!","password_confirmation":"Password123!"}'
+# -> { "user": {...}, "token": "<TOKEN>" }
+
+# 2. Use the token on protected endpoints
+curl http://localhost:8000/api/loans \
+  -H "Authorization: Bearer <TOKEN>"
+```
+
+In Postman: **Authorization** tab → **Bearer Token** → paste the token.
+
+---
+
+## Endpoints
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| POST | `/api/register` | public | Create user, returns user + token |
+| POST | `/api/login` | public | Authenticate, returns user + token |
+| GET | `/api/me` | bearer | Current authenticated user |
+| POST | `/api/logout` | bearer | Revoke the current token |
+| GET | `/api/loans` | bearer | All loans (paginated) |
+| GET | `/api/loans/me` | bearer | Loans owned by the authenticated user |
+| POST | `/api/loans` | bearer | Create a loan (owned by the caller) |
+| GET | `/api/loans/{id}` | bearer | Retrieve a single loan |
+| PUT/PATCH | `/api/loans/{id}` | bearer | Update a loan |
+| DELETE | `/api/loans/{id}` | bearer | Delete a loan |
+
+**Loan fields:** `borrower_name`, `borrower_email`, `amount`, `interest_rate`,
+`term_months`, `status` (`pending` \| `approved` \| `active` \| `paid` \| `rejected`,
+defaults to `pending`).
+
+**User roles:** `users.role` is `user` (default) or `admin`. Not mass-assignable
+via registration — admins are created via seeder/tinker.
+
+---
+
+## Resetting the database
+
+Wipes all data and re-runs every migration (schema preserved):
+
+```bash
+docker compose exec app php artisan migrate:fresh --force
+```
+
+---
+
+## Project layout
+
+```
+app/Http/Controllers/   AuthController, LoanController, Controller (OpenAPI base)
+app/Http/Requests/      Register/Login + Store/UpdateLoan form requests (validation)
+app/Http/Resources/     LoanResource (response shaping)
+app/Http/Middleware/    ForceJsonRequest (forces JSON on /api/*)
+app/Models/             User, Loan
+bootstrap/app.php        Routing, middleware, JSON exception rendering
+routes/api.php           All API routes
+database/migrations/     Schema (loans, users.role, loans.user_id, Sanctum tokens)
+Dockerfile, docker-compose.yml, docker/entrypoint.sh
+```
