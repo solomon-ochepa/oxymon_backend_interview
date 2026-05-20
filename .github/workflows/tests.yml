@@ -20,21 +20,21 @@ jobs:
         with:
           php-version: 8.4
           tools: composer:v2
-          coverage: xdebug
+          # coverage: xdebug
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
+      # - name: Setup pnpm
+      #   uses: pnpm/action-setup@v4
+      #   with:
+      #     version: latest
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
+      # - name: Setup Node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '22'
+      #     cache: 'pnpm'
 
-      - name: Install Node Dependencies
-        run: pnpm i --ignore-scripts
+      # - name: Install Node Dependencies
+      #   run: pnpm i --ignore-scripts
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -48,8 +48,8 @@ jobs:
       - name: Create Test Database
         run: touch database/test.sqlite
 
-      - name: Build Assets
-        run: pnpm run build
+      # - name: Build Assets
+      #   run: pnpm run build
 
       - name: Run Tests
         run: ./vendor/bin/pest --parallel
