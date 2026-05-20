@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // Everything below requires a valid Sanctum bearer token
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('me', [AuthController::class, 'me']);
+    Route::post('logout', [AuthController::class, 'logout']);
 
     // Must be declared before the apiResource so "me" is not matched
     // as a {loan} route-model-binding parameter.

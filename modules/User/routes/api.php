@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\User\App\Http\Controllers\UserController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    //
+// Everything below requires a valid Sanctum bearer token
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('me', [UserController::class, 'me']);
 });
