@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Modules\Loan\App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,8 +26,7 @@ class UpdateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'borrower_name' => ['sometimes', 'required', 'string', 'max:255'],
-            'borrower_email' => ['sometimes', 'required', 'email', 'max:255'],
+            'user_id' => ['required', 'exists:users,id'],
             'amount' => ['sometimes', 'required', 'numeric', 'min:1', 'max:9999999999'],
             'interest_rate' => ['sometimes', 'required', 'numeric', 'min:0', 'max:100'],
             'term_months' => ['sometimes', 'required', 'integer', 'min:1', 'max:600'],

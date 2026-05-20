@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Loan;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Modules\Loan\App\Models\Loan;
 use Modules\User\App\Models\User;
 
 describe('fillable', function () {

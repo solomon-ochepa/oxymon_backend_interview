@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Loan\App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\User\App\Models\User;
 
 class Loan extends Model
 {
