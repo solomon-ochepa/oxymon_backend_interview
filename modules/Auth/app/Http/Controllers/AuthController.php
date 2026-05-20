@@ -5,11 +5,11 @@ namespace Modules\Auth\App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Modules\User\App\Models\User;
 use OpenApi\Attributes as OA;
 
 class AuthController extends Controller
@@ -90,24 +90,6 @@ class AuthController extends Controller
             'user' => $user->only(['id', 'name', 'email']),
             'token' => $token,
         ]);
-    }
-
-    /**
-     * Return the authenticated user.
-     */
-    #[OA\Get(
-        path: '/api/me',
-        summary: 'Get the authenticated user',
-        tags: ['Auth'],
-        security: [['sanctum' => []]],
-        responses: [
-            new OA\Response(response: 200, description: 'The authenticated user'),
-            new OA\Response(response: 401, description: 'Unauthenticated'),
-        ],
-    )]
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json($request->user()->only(['id', 'name', 'email']));
     }
 
     /**
