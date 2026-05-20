@@ -84,7 +84,7 @@ describe('role', function () {
 
 describe('loans relationship', function () {
     beforeEach(function () {
-        $this->user = new User();
+        $this->user = new User;
     });
 
     test('loans() returns a HasMany instance', function () {
