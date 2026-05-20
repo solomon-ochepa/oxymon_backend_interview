@@ -23,6 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
         // unauthenticated requests return 401 instead of redirecting to a
         // non-existent "login" route.
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request, \Throwable $e) => $request->is('api/*') || $request->expectsJson()
+            fn (Request $request, Throwable $e) => $request->is('api/*') || $request->expectsJson()
         );
     })->create();
