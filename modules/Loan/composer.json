@@ -1,0 +1,28 @@
+{
+    "name": "solomon-ochepa/loan",
+    "description": "",
+    "authors": [
+        {
+            "name": "Solomon Ochepa",
+            "email": "solomonochepa@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Loan\\App\\": "app/",
+            "Modules\\Loan\\Database\\Factories\\": "database/factories/",
+            "Modules\\Loan\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Loan\\Tests\\": "tests/"
+        }
+    }
+}

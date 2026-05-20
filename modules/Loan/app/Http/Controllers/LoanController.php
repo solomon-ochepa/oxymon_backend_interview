@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Loan\App\Http\Controllers;
 
-use App\Http\Requests\StoreLoanRequest;
-use App\Http\Requests\UpdateLoanRequest;
-use App\Http\Resources\LoanResource;
-use App\Models\Loan;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Modules\Loan\App\Http\Requests\StoreLoanRequest;
+use Modules\Loan\App\Http\Requests\UpdateLoanRequest;
+use Modules\Loan\App\Http\Resources\LoanResource;
+use Modules\Loan\App\Models\Loan;
 use OpenApi\Attributes as OA;
 
 class LoanController extends Controller
