@@ -14,6 +14,8 @@ class UserFactory extends Factory
      */
     protected $model = User::class;
 
+    protected static ?string $password = null;
+
     /**
      * Define the model's default state.
      */
