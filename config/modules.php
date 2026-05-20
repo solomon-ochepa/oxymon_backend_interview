@@ -190,7 +190,7 @@ return [
             // resource/
             'assets' => ['path' => 'resources/assets', 'generate' => false],
             'component-view' => ['path' => 'resources/views/components', 'generate' => false],
-            'views' => ['path' => 'resources/views', 'generate' => false],
+            'views' => ['path' => 'resources/views', 'generate' => true],
             'inertia' => ['path' => 'resources/js/Pages', 'generate' => false],
             'inertia-components' => ['path' => 'resources/js/Components', 'generate' => false],
 
