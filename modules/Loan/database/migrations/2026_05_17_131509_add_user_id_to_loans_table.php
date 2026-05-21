@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('loans', 'user_id')) {
+            return;
+        }
+
         Schema::table('loans', function (Blueprint $table) {
             // Nullable because SQLite cannot ALTER TABLE ADD a NOT NULL
             // column. Application logic always sets it (loans are created
