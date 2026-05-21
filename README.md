@@ -125,9 +125,8 @@ In Postman: **Authorization** tab → **Bearer Token** → paste the token.
 | PUT/PATCH | `/api/loans/{id}` | bearer | Update a loan |
 | DELETE | `/api/loans/{id}` | bearer | Delete a loan |
 
-**Loan fields:** `borrower_name`, `borrower_email`, `amount`, `interest_rate`,
-`term_months`, `status` (`pending` \| `approved` \| `active` \| `paid` \| `rejected`,
-defaults to `pending`).
+**Loan fields:** `user_id`, `amount`, `interest`, `term` (months),
+`status` (`pending` \| `approved` \| `active` \| `paid` \| `rejected`, defaults to `pending`).
 
 **User roles:** `users.role` is `user` (default) or `admin`. Not mass-assignable
 via registration — admins are created via seeder/tinker.

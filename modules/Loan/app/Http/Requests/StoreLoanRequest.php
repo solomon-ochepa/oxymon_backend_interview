@@ -26,8 +26,8 @@ class StoreLoanRequest extends FormRequest
         return [
             'user_id' => ['required', 'exists:users,id'],
             'amount' => ['required', 'numeric', 'min:1', 'max:9999999999'],
-            'interest_rate' => ['required', 'numeric', 'min:0', 'max:100'],
-            'term_months' => ['required', 'integer', 'min:1', 'max:600'],
+            'interest' => ['required', 'numeric', 'min:0', 'max:100'],
+            'term' => ['required', 'integer', 'min:1', 'max:600'],
             'status' => ['sometimes', Rule::in(['pending', 'approved', 'active', 'paid', 'rejected'])],
         ];
     }

@@ -5,6 +5,7 @@ namespace Modules\Loan\App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Loan\Database\Factories\LoanFactory;
 use Modules\User\App\Models\User;
 
 class Loan extends Model
@@ -18,13 +19,16 @@ class Loan extends Model
      */
     protected $fillable = [
         'user_id',
-        'borrower_name',
-        'borrower_email',
         'amount',
-        'interest_rate',
-        'term_months',
+        'interest',
+        'term',
         'status',
     ];
+
+    protected static function newFactory(): LoanFactory
+    {
+        return LoanFactory::new();
+    }
 
     /**
      * The attributes that should be cast.
@@ -35,8 +39,8 @@ class Loan extends Model
     {
         return [
             'amount' => 'decimal:2',
-            'interest_rate' => 'decimal:2',
-            'term_months' => 'integer',
+            'interest' => 'decimal:2',
+            'term' => 'integer',
         ];
     }
 

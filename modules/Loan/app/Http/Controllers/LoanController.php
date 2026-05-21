@@ -105,8 +105,8 @@ class LoanController extends Controller
     )]
     public function store(StoreLoanRequest $request): JsonResponse
     {
-        $loan = $request->user()->loans()->create($request->validated());
-        $loan->refresh(); // reflect DB-side defaults (e.g. status) in the response
+        $loan = Loan::create($request->validated());
+        $loan->refresh();
 
         return LoanResource::make($loan)
             ->response()
