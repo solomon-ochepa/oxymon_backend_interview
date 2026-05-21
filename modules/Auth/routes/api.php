@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use Modules\Auth\App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 // Public authentication endpoints
