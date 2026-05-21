@@ -28,8 +28,8 @@ class UpdateLoanRequest extends FormRequest
         return [
             'user_id' => ['required', 'exists:users,id'],
             'amount' => ['sometimes', 'required', 'numeric', 'min:1', 'max:9999999999'],
-            'interest_rate' => ['sometimes', 'required', 'numeric', 'min:0', 'max:100'],
-            'term_months' => ['sometimes', 'required', 'integer', 'min:1', 'max:600'],
+            'interest' => ['sometimes', 'required', 'numeric', 'min:0', 'max:100'],
+            'term' => ['sometimes', 'required', 'integer', 'min:1', 'max:600'],
             'status' => ['sometimes', 'required', Rule::in(['pending', 'approved', 'active', 'paid', 'rejected'])],
         ];
     }

@@ -17,11 +17,9 @@ class LoanResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'borrower_name' => $this->borrower_name,
-            'borrower_email' => $this->borrower_email,
             'amount' => $this->amount,
-            'interest_rate' => $this->interest_rate,
-            'term_months' => $this->term_months,
+            'interest' => $this->interest,
+            'term' => $this->term,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
