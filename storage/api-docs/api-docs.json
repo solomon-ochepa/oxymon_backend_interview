@@ -19,7 +19,7 @@
                 ],
                 "summary": "Register a new user",
                 "description": "Register a new user and issue an API token.",
-                "operationId": "8a56853624e025573120a09a4c75d468",
+                "operationId": "63d88070c2ae78c8571bc423689ad560",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -74,7 +74,7 @@
                 ],
                 "summary": "Log in",
                 "description": "Authenticate a user and issue an API token.",
-                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "operationId": "6fd93c5b6b29a6683c72d76e3bf539a9",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -111,29 +111,6 @@
                 }
             }
         },
-        "/api/me": {
-            "get": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Get the authenticated user",
-                "description": "Return the authenticated user.",
-                "operationId": "9d9bc556f927575aa492a88c28fe5908",
-                "responses": {
-                    "200": {
-                        "description": "The authenticated user"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/logout": {
             "post": {
                 "tags": [
@@ -141,7 +118,7 @@
                 ],
                 "summary": "Log out (revoke current token)",
                 "description": "Revoke the current access token (log out).",
-                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "operationId": "5e25dad96294c298ef6754af51ad8c6f",
                 "responses": {
                     "204": {
                         "description": "Token revoked"
@@ -164,7 +141,7 @@
                 ],
                 "summary": "Retrieve all loans",
                 "description": "Retrieve all loans (most recent first, paginated).",
-                "operationId": "53fdef403307586122900dc3b1d07368",
+                "operationId": "fe6fb0dd93d06ce0f563d8731361edcd",
                 "responses": {
                     "200": {
                         "description": "Paginated list of loans",
@@ -197,7 +174,7 @@
                 ],
                 "summary": "Create a loan",
                 "description": "Create a loan.",
-                "operationId": "92bd5c653a9a8345b4f161d5ba3bbd71",
+                "operationId": "6e7ea33cb04e3146343243ed7221d90b",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -242,7 +219,7 @@
                 ],
                 "summary": "Retrieve the authenticated user's loans",
                 "description": "Retrieve all loans belonging to the authenticated user.",
-                "operationId": "c7b067cb44bf92dbf66a8b5c4cbcb367",
+                "operationId": "c0eefb6db4b366558e386e8e11a63d25",
                 "responses": {
                     "200": {
                         "description": "Paginated list of the current user's loans",
@@ -280,7 +257,7 @@
                 ],
                 "summary": "Retrieve a single loan",
                 "description": "Retrieve a single loan.",
-                "operationId": "39a4e10f305b5be4c3e4eba31a94777a",
+                "operationId": "7c20a30945bcd00308c7cfe6faa6bb9d",
                 "parameters": [
                     {
                         "name": "loan",
@@ -323,7 +300,7 @@
                 ],
                 "summary": "Update a loan",
                 "description": "Update a loan.",
-                "operationId": "d1a9dfd54e508debb4769bc440e372f8",
+                "operationId": "c9b6d7ca62403caf1cfe74e6bedc4052",
                 "parameters": [
                     {
                         "name": "loan",
@@ -379,7 +356,7 @@
                 ],
                 "summary": "Delete a loan",
                 "description": "Delete a loan.",
-                "operationId": "6d80bd9e85d71ce0f714269e753f85fb",
+                "operationId": "137bd40f8f4f0e3b0bcc44937a04763e",
                 "parameters": [
                     {
                         "name": "loan",
@@ -404,6 +381,30 @@
                     }
                 ]
             }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Auth",
+                    "User"
+                ],
+                "summary": "Get the authenticated user",
+                "description": "Return the authenticated user.",
+                "operationId": "3489774d24241e103b5b457f42eacb38",
+                "responses": {
+                    "200": {
+                        "description": "The authenticated user"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -419,24 +420,15 @@
                         "type": "integer",
                         "example": 1
                     },
-                    "borrower_name": {
-                        "type": "string",
-                        "example": "Ada Lovelace"
-                    },
-                    "borrower_email": {
-                        "type": "string",
-                        "format": "email",
-                        "example": "ada@example.com"
-                    },
                     "amount": {
                         "type": "string",
                         "example": "5000.00"
                     },
-                    "interest_rate": {
+                    "interest": {
                         "type": "string",
                         "example": "12.50"
                     },
-                    "term_months": {
+                    "term": {
                         "type": "integer",
                         "example": 24
                     },
@@ -465,33 +457,27 @@
             "LoanInput": {
                 "title": "Loan input",
                 "required": [
-                    "borrower_name",
-                    "borrower_email",
+                    "user_id",
                     "amount",
-                    "interest_rate",
-                    "term_months"
+                    "interest",
+                    "term"
                 ],
                 "properties": {
-                    "borrower_name": {
-                        "type": "string",
-                        "example": "Ada Lovelace"
-                    },
-                    "borrower_email": {
-                        "type": "string",
-                        "format": "email",
-                        "example": "ada@example.com"
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
                     },
                     "amount": {
                         "type": "number",
                         "format": "float",
                         "example": 5000
                     },
-                    "interest_rate": {
+                    "interest": {
                         "type": "number",
                         "format": "float",
                         "example": 12.5
                     },
-                    "term_months": {
+                    "term": {
                         "type": "integer",
                         "example": 24
                     },
@@ -526,6 +512,10 @@
         {
             "name": "Loans",
             "description": "Loans"
+        },
+        {
+            "name": "User",
+            "description": "User"
         }
     ]
 }
